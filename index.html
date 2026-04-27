@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CalcAI — Calculadora Inteligente</title>
- 
+
   <!-- Google Fonts: Orbitron para títulos (futurista), DM Mono para los números -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
- 
+
   <style>
     /* =====================================================
        VARIABLES CSS — El "tema" central de la app.
@@ -22,31 +22,31 @@
       --bg-card:        #0d0d1f;       /* Fondo de la calculadora */
       --bg-glass:       rgba(255,255,255,0.04); /* Efecto vidrio translúcido */
       --border-glow:    rgba(139,92,246,0.35);  /* Borde morado con opacidad */
- 
+
       --violet-bright:  #8b5cf6;   /* Morado vibrante */
       --violet-deep:    #6d28d9;   /* Morado profundo */
       --blue-bright:    #3b82f6;   /* Azul eléctrico */
       --blue-deep:      #1d4ed8;   /* Azul profundo */
       --cyan-accent:    #22d3ee;   /* Celeste neón para acentos */
- 
+
       --text-primary:   #f0e6ff;   /* Blanco violáceo para texto principal */
       --text-muted:     #6b7280;   /* Gris para texto secundario */
       --text-display:   #ffffff;
- 
+
       --btn-number-bg:  rgba(255,255,255,0.06);
       --btn-number-hover: rgba(139,92,246,0.2);
       --btn-op-bg:      rgba(139,92,246,0.15);
       --btn-op-hover:   rgba(139,92,246,0.4);
       --btn-equals-bg:  linear-gradient(135deg, #8b5cf6, #3b82f6);
- 
+
       --radius-card:    24px;
       --radius-btn:     14px;
       --transition:     0.15s ease;
- 
+
       --glow-violet: 0 0 20px rgba(139,92,246,0.5), 0 0 60px rgba(139,92,246,0.15);
       --glow-blue:   0 0 20px rgba(59,130,246,0.5),  0 0 60px rgba(59,130,246,0.15);
     }
- 
+
     /* =====================================================
        RESET & BASE
        Eliminamos estilos por defecto del navegador y
@@ -58,11 +58,11 @@
       margin: 0;
       padding: 0;
     }
- 
-    html, body {
-      height: 100%;
+
+    html {
+      overflow-y: auto;
     }
- 
+
     body {
       font-family: 'DM Mono', monospace;
       background-color: var(--bg-deep);
@@ -71,16 +71,17 @@
       display: flex;
       flex-direction: column;       /* Apila: título + calculadora + footer */
       align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
- 
+      justify-content: flex-start;  /* No centra verticalmente para respetar scroll */
+      padding: 1.5rem 1rem;
+      padding-top: max(1.5rem, 5vh); /* Se adapta: espacio superior flexible */
+
       /* Fondo con malla de degradados para profundidad visual */
       background-image:
         radial-gradient(ellipse 80% 60% at 20% 10%, rgba(109,40,217,0.18) 0%, transparent 60%),
         radial-gradient(ellipse 60% 50% at 80% 90%, rgba(29,78,216,0.18) 0%, transparent 60%),
         radial-gradient(ellipse 40% 40% at 50% 50%, rgba(139,92,246,0.06) 0%, transparent 70%);
     }
- 
+
     /* =====================================================
        TÍTULO PRINCIPAL
        Usa Orbitron (fuente futurista/gaming) y un degradado
@@ -89,22 +90,22 @@
     .app-title {
       font-family: 'Orbitron', sans-serif;
       font-weight: 900;
-      font-size: clamp(1.6rem, 5vw, 2.4rem); /* Tamaño adaptable */
+      font-size: clamp(1.1rem, 3.5vw, 1.6rem); /* Más chico y adaptable */
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;          /* Menos espacio debajo del título */
       text-align: center;
- 
+
       /* Degradado en el texto usando clip */
       background: linear-gradient(135deg, #c4b5fd 0%, #818cf8 40%, #38bdf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
- 
+
       /* Sombra de texto brillante */
       filter: drop-shadow(0 0 18px rgba(139,92,246,0.6));
     }
- 
+
     .app-title span {
       /* La palabra "AI" con un color diferente */
       background: linear-gradient(135deg, #f0abfc, #e879f9);
@@ -112,7 +113,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
- 
+
     /* =====================================================
        TARJETA CALCULADORA (el contenedor principal)
        Usa backdrop-filter: blur() para el efecto "vidrio"
@@ -133,7 +134,7 @@
       position: relative;
       overflow: hidden;
     }
- 
+
     /* Línea decorativa brillante en la parte superior de la calculadora */
     .calculator::before {
       content: '';
@@ -143,7 +144,7 @@
       background: linear-gradient(90deg, transparent, var(--violet-bright), var(--blue-bright), transparent);
       opacity: 0.8;
     }
- 
+
     /* =====================================================
        PANTALLA / DISPLAY
        Acá se muestran los números ingresados y el resultado.
@@ -162,7 +163,7 @@
       position: relative;
       overflow: hidden;
     }
- 
+
     /* Pequeña línea de "expresión" que muestra lo que ingresaste antes */
     .display-expression {
       font-size: 0.75rem;
@@ -174,7 +175,7 @@
       white-space: nowrap;
       direction: rtl;          /* Texto empieza desde la derecha */
     }
- 
+
     /* El número grande principal */
     .display-value {
       font-family: 'DM Mono', monospace;
@@ -189,7 +190,7 @@
       direction: rtl;          /* Los números "empujan" hacia la izquierda */
       transition: color 0.2s ease;
     }
- 
+
     /* =====================================================
        GRILLA DE BOTONES
        CSS Grid con 4 columnas iguales y gap entre ellas.
@@ -200,7 +201,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
- 
+
     /* ESTILO BASE DE CADA BOTÓN */
     .btn {
       font-family: 'DM Mono', monospace;
@@ -223,7 +224,7 @@
       outline: none;
       -webkit-tap-highlight-color: transparent; /* Quita el highlight azul en móviles */
     }
- 
+
     /* Efecto "ripple" (onda) cuando hacés clic — es un pseudo-elemento */
     .btn::after {
       content: '';
@@ -234,30 +235,30 @@
       transform: scale(0);
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
- 
+
     .btn:active::after {
       opacity: 1;
       transform: scale(1);
     }
- 
+
     /* Presión física al hacer clic */
     .btn:active {
       transform: scale(0.94);
     }
- 
+
     /* --- BOTONES NUMÉRICOS (0-9 y .) --- */
     .btn-num {
       background: var(--btn-number-bg);
       color: var(--text-primary);
       border: 1px solid rgba(255,255,255,0.05);
     }
- 
+
     .btn-num:hover {
       background: var(--btn-number-hover);
       border-color: rgba(139,92,246,0.3);
       box-shadow: 0 0 12px rgba(139,92,246,0.2);
     }
- 
+
     /* --- BOTONES DE OPERADOR (+, -, *, /) --- */
     .btn-op {
       background: var(--btn-op-bg);
@@ -265,28 +266,28 @@
       border: 1px solid rgba(139,92,246,0.25);
       font-size: 1.3rem;
     }
- 
+
     .btn-op:hover {
       background: var(--btn-op-hover);
       border-color: rgba(139,92,246,0.6);
       color: #c4b5fd;
       box-shadow: var(--glow-violet);
     }
- 
+
     /* --- BOTONES FUNCIONALES (AC, +/-, %) --- */
     .btn-fn {
       background: rgba(59,130,246,0.1);
       color: var(--blue-bright);
       border: 1px solid rgba(59,130,246,0.2);
     }
- 
+
     .btn-fn:hover {
       background: rgba(59,130,246,0.25);
       border-color: rgba(59,130,246,0.5);
       color: #93c5fd;
       box-shadow: var(--glow-blue);
     }
- 
+
     /* --- BOTÓN IGUAL (=) — El protagonista --- */
     .btn-equals {
       background: var(--btn-equals-bg);
@@ -297,14 +298,14 @@
       box-shadow: 0 4px 20px rgba(139,92,246,0.3);
       position: relative;
     }
- 
+
     .btn-equals:hover {
       box-shadow:
         0 4px 30px rgba(139,92,246,0.5),
         0 0 60px rgba(59,130,246,0.2);
       filter: brightness(1.15);
     }
- 
+
     /* Brillo animado que pasa sobre el botón = */
     .btn-equals::before {
       content: '';
@@ -317,21 +318,21 @@
       transform: skewX(-20deg);
       animation: shimmer 3s infinite;
     }
- 
+
     @keyframes shimmer {
       0%   { left: -60%; opacity: 0; }
       10%  { opacity: 1; }
       50%  { left: 120%; opacity: 0; }
       100% { left: 120%; opacity: 0; }
     }
- 
+
     /* El "0" ocupa 2 columnas */
     .btn-zero {
       grid-column: span 2;
       justify-content: flex-start;
       padding-left: 1.4rem;
     }
- 
+
     /* =====================================================
        SEPARADOR entre la pantalla y los botones
     ===================================================== */
@@ -340,7 +341,7 @@
       background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), rgba(59,130,246,0.3), transparent);
       margin-bottom: 1.25rem;
     }
- 
+
     /* =====================================================
        MODAL DE PRICING
        Oculto por defecto (display:none). Cuando se activa
@@ -359,17 +360,17 @@
       padding: 1rem;
       animation: fadeIn 0.2s ease;
     }
- 
+
     /* Cuando el modal está activo, se muestra como flex */
     .modal-overlay.active {
       display: flex;
     }
- 
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to   { opacity: 1; }
     }
- 
+
     /* La caja blanca (en este caso oscura) del modal */
     .modal {
       background: #0a0a1e;
@@ -385,13 +386,13 @@
       position: relative;
       animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
- 
+
     /* La tarjeta sube desde abajo con un efecto "spring" */
     @keyframes slideUp {
       from { transform: translateY(40px) scale(0.95); opacity: 0; }
       to   { transform: translateY(0) scale(1);       opacity: 1; }
     }
- 
+
     /* Línea brillante en el top del modal */
     .modal::before {
       content: '';
@@ -400,7 +401,7 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, #8b5cf6, #3b82f6, transparent);
     }
- 
+
     /* Botón "X" para cerrar */
     .modal-close {
       position: absolute;
@@ -419,19 +420,19 @@
       justify-content: center;
       transition: all 0.2s ease;
     }
- 
+
     .modal-close:hover {
       background: rgba(139,92,246,0.2);
       color: var(--text-primary);
       border-color: rgba(139,92,246,0.4);
     }
- 
+
     /* Encabezado del modal */
     .modal-header {
       text-align: center;
       margin-bottom: 2rem;
     }
- 
+
     .modal-badge {
       display: inline-block;
       background: rgba(139,92,246,0.15);
@@ -445,7 +446,7 @@
       border-radius: 999px;
       margin-bottom: 0.75rem;
     }
- 
+
     .modal-title {
       font-family: 'Orbitron', sans-serif;
       font-weight: 900;
@@ -456,12 +457,12 @@
       background-clip: text;
       margin-bottom: 0.5rem;
     }
- 
+
     .modal-subtitle {
       color: var(--text-muted);
       font-size: 0.85rem;
     }
- 
+
     /* =====================================================
        GRILLA DE PLANES DE PRICING
        En pantallas grandes: 3 columnas. En chicas: 1 columna.
@@ -471,13 +472,13 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }
- 
+
     @media (max-width: 600px) {
       .plans-grid {
         grid-template-columns: 1fr;  /* Apilar en móviles */
       }
     }
- 
+
     /* TARJETA DE PLAN */
     .plan-card {
       background: rgba(255,255,255,0.03);
@@ -489,24 +490,24 @@
       transition: all 0.25s ease;
       cursor: pointer;
     }
- 
+
     .plan-card:hover {
       transform: translateY(-4px);
       border-color: rgba(139,92,246,0.4);
       box-shadow: 0 12px 40px rgba(139,92,246,0.15);
     }
- 
+
     /* El plan "Pro" es el destacado — tiene borde morado y badge */
     .plan-card.featured {
       background: rgba(139,92,246,0.08);
       border-color: rgba(139,92,246,0.5);
       box-shadow: 0 0 30px rgba(139,92,246,0.15);
     }
- 
+
     .plan-card.featured:hover {
       box-shadow: var(--glow-violet);
     }
- 
+
     /* Badge "más popular" flotante en el top */
     .plan-badge {
       position: absolute;
@@ -523,7 +524,7 @@
       white-space: nowrap;
       font-family: 'DM Mono', monospace;
     }
- 
+
     .plan-name {
       font-family: 'Orbitron', sans-serif;
       font-size: 0.85rem;
@@ -532,7 +533,7 @@
       color: var(--text-muted);
       margin-bottom: 0.75rem;
     }
- 
+
     .plan-price {
       font-family: 'DM Mono', monospace;
       font-size: 2.2rem;
@@ -540,18 +541,18 @@
       line-height: 1;
       margin-bottom: 0.25rem;
     }
- 
+
     /* Cada plan tiene un color de precio diferente */
     .plan-card:nth-child(1) .plan-price { color: #94a3b8; }
     .plan-card:nth-child(2) .plan-price { color: #c4b5fd; }
     .plan-card:nth-child(3) .plan-price { color: #38bdf8; }
- 
+
     .plan-period {
       font-size: 0.72rem;
       color: var(--text-muted);
       margin-bottom: 1.25rem;
     }
- 
+
     /* Lista de features del plan */
     .plan-features {
       list-style: none;
@@ -561,7 +562,7 @@
       text-align: left;
       margin-bottom: 1.5rem;
     }
- 
+
     /* Checkmark con degradado de color */
     .plan-features li::before {
       content: '✦ ';
@@ -571,7 +572,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
- 
+
     /* Botón CTA de cada plan */
     .plan-btn {
       width: 100%;
@@ -585,40 +586,40 @@
       border: none;
       transition: all 0.2s ease;
     }
- 
+
     .plan-btn-outline {
       background: transparent;
       border: 1px solid rgba(139,92,246,0.35);
       color: #c4b5fd;
     }
- 
+
     .plan-btn-outline:hover {
       background: rgba(139,92,246,0.15);
       border-color: rgba(139,92,246,0.6);
     }
- 
+
     .plan-btn-solid {
       background: linear-gradient(135deg, #8b5cf6, #3b82f6);
       color: white;
       box-shadow: 0 4px 20px rgba(139,92,246,0.35);
     }
- 
+
     .plan-btn-solid:hover {
       filter: brightness(1.15);
       box-shadow: var(--glow-violet);
     }
- 
+
     .plan-btn-cyan {
       background: transparent;
       border: 1px solid rgba(34,211,238,0.35);
       color: var(--cyan-accent);
     }
- 
+
     .plan-btn-cyan:hover {
       background: rgba(34,211,238,0.1);
       border-color: rgba(34,211,238,0.6);
     }
- 
+
     /* =====================================================
        FOOTER
     ===================================================== */
@@ -630,7 +631,7 @@
       letter-spacing: 0.06em;
       opacity: 0.6;
     }
- 
+
     /* =====================================================
        ANIMACIÓN DE LA PANTALLA cuando hay resultado
        (flash de color breve)
@@ -639,8 +640,8 @@
       color: #c4b5fd;
       text-shadow: 0 0 20px rgba(139,92,246,0.8);
     }
- 
- 
+
+
     /* =====================================================
        MODAL DE PAGO — Mercado Pago
     ===================================================== */
@@ -656,9 +657,9 @@
       padding: 1rem;
       animation: fadeIn 0.2s ease;
     }
- 
+
     .payment-overlay.active { display: flex; }
- 
+
     .payment-modal {
       background: #08081a;
       border-radius: 28px;
@@ -675,7 +676,7 @@
       animation: slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
       overflow: hidden;
     }
- 
+
     /* Brillo de fondo decorativo dentro del modal */
     .payment-modal::after {
       content: '';
@@ -687,7 +688,7 @@
       background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
- 
+
     /* Línea brillante superior */
     .payment-modal::before {
       content: '';
@@ -696,7 +697,7 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, #8b5cf6, #3b82f6, transparent);
     }
- 
+
     .payment-close {
       position: absolute;
       top: 1.25rem; right: 1.25rem;
@@ -713,13 +714,13 @@
       transition: all 0.2s ease;
       z-index: 1;
     }
- 
+
     .payment-close:hover {
       background: rgba(139,92,246,0.2);
       color: var(--text-primary);
       border-color: rgba(139,92,246,0.4);
     }
- 
+
     /* Logo / ícono de MP */
     .payment-icon {
       width: 64px;
@@ -735,7 +736,7 @@
       position: relative;
       z-index: 1;
     }
- 
+
     .payment-label {
       font-size: 0.7rem;
       letter-spacing: 0.18em;
@@ -746,7 +747,7 @@
       position: relative;
       z-index: 1;
     }
- 
+
     .payment-title {
       font-family: 'Orbitron', sans-serif;
       font-size: 1.1rem;
@@ -756,7 +757,7 @@
       position: relative;
       z-index: 1;
     }
- 
+
     /* Caja del alias — el elemento estrella */
     .alias-box {
       background: rgba(139,92,246,0.08);
@@ -769,13 +770,13 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
- 
+
     .alias-box:hover {
       background: rgba(139,92,246,0.14);
       border-color: rgba(139,92,246,0.6);
       box-shadow: var(--glow-violet);
     }
- 
+
     .alias-tag {
       font-size: 0.65rem;
       letter-spacing: 0.15em;
@@ -784,7 +785,7 @@
       margin-bottom: 0.6rem;
       font-family: 'DM Mono', monospace;
     }
- 
+
     /* El alias en sí — grande, brillante, con degradado */
     .alias-value {
       font-family: 'Orbitron', sans-serif;
@@ -798,7 +799,7 @@
       filter: drop-shadow(0 0 16px rgba(139,92,246,0.5));
       line-height: 1.1;
     }
- 
+
     /* Hint de "tocá para copiar" */
     .alias-copy-hint {
       font-size: 0.68rem;
@@ -812,9 +813,9 @@
       gap: 0.3rem;
       transition: color 0.2s;
     }
- 
+
     .alias-box:hover .alias-copy-hint { color: #c4b5fd; }
- 
+
     /* Toast de "¡Copiado!" que aparece brevemente */
     .copy-toast {
       position: absolute;
@@ -833,9 +834,9 @@
       transition: opacity 0.2s ease;
       pointer-events: none;
     }
- 
+
     .copy-toast.show { opacity: 1; }
- 
+
     .payment-note {
       font-size: 0.72rem;
       color: var(--text-muted);
@@ -843,41 +844,41 @@
       position: relative;
       z-index: 1;
     }
- 
+
     .payment-note strong {
       color: #c4b5fd;
     }
- 
+
     /* Pulso animado en el borde del alias box */
     @keyframes pulse-border {
       0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.4); }
       50%       { box-shadow: 0 0 0 8px rgba(139,92,246,0); }
     }
- 
+
     .alias-box { animation: pulse-border 2.5s ease-in-out infinite; }
   </style>
 </head>
 <body>
- 
+
   <!-- =====================================================
        TÍTULO PRINCIPAL
        El <span> encierra "AI" para darle color distinto.
   ===================================================== -->
   <h1 class="app-title">Calc<span>AI</span> &nbsp;⬡</h1>
- 
+
   <!-- =====================================================
        CALCULADORA
   ===================================================== -->
   <div class="calculator" id="calculator">
- 
+
     <!-- PANTALLA -->
     <div class="display" id="display">
       <div class="display-expression" id="expression"></div>
       <div class="display-value" id="value">0</div>
     </div>
- 
+
     <div class="divider"></div>
- 
+
     <!-- BOTONES: organización en CSS Grid 4x5 -->
     <!-- Fila 1: AC, +/-, %, ÷ -->
     <!-- Fila 2: 7, 8, 9, × -->
@@ -889,28 +890,28 @@
       <button class="btn btn-fn"     data-action="toggle-sign">+/−</button>
       <button class="btn btn-fn"     data-action="percent">%</button>
       <button class="btn btn-op"     data-action="operator" data-value="÷">÷</button>
- 
+
       <button class="btn btn-num"    data-action="digit" data-value="7">7</button>
       <button class="btn btn-num"    data-action="digit" data-value="8">8</button>
       <button class="btn btn-num"    data-action="digit" data-value="9">9</button>
       <button class="btn btn-op"     data-action="operator" data-value="×">×</button>
- 
+
       <button class="btn btn-num"    data-action="digit" data-value="4">4</button>
       <button class="btn btn-num"    data-action="digit" data-value="5">5</button>
       <button class="btn btn-num"    data-action="digit" data-value="6">6</button>
       <button class="btn btn-op"     data-action="operator" data-value="−">−</button>
- 
+
       <button class="btn btn-num"    data-action="digit" data-value="1">1</button>
       <button class="btn btn-num"    data-action="digit" data-value="2">2</button>
       <button class="btn btn-num"    data-action="digit" data-value="3">3</button>
       <button class="btn btn-op"     data-action="operator" data-value="+">+</button>
- 
+
       <button class="btn btn-num btn-zero" data-action="digit" data-value="0">0</button>
       <button class="btn btn-num"    data-action="decimal">.</button>
       <button class="btn btn-equals" data-action="equals">=</button>
     </div>
   </div>
- 
+
   <!-- =====================================================
        MODAL DE PRICING
        Está fuera de la calculadora para poder cubrir
@@ -918,20 +919,20 @@
   ===================================================== -->
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal" id="modal">
- 
+
       <!-- Botón cerrar -->
       <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
- 
+
       <!-- Encabezado -->
       <div class="modal-header">
         <div class="modal-badge">⬡ CalcAI Pricing</div>
         <h2 class="modal-title">Potenciá tu Cálculo</h2>
         <p class="modal-subtitle">Desbloqueá operaciones ilimitadas con IA integrada</p>
       </div>
- 
+
       <!-- Tarjetas de planes -->
       <div class="plans-grid">
- 
+
         <!-- PLAN STARTER -->
         <div class="plan-card">
           <p class="plan-name">Starter</p>
@@ -945,7 +946,7 @@
           </ul>
           <button class="plan-btn plan-btn-outline">Suscribirse</button>
         </div>
- 
+
         <!-- PLAN PRO (destacado) -->
         <div class="plan-card featured">
           <div class="plan-badge">✦ Más Popular</div>
@@ -960,7 +961,7 @@
           </ul>
           <button class="plan-btn plan-btn-solid">Suscribirse</button>
         </div>
- 
+
         <!-- PLAN ENTERPRISE -->
         <div class="plan-card">
           <p class="plan-name">Enterprise</p>
@@ -974,24 +975,24 @@
           </ul>
           <button class="plan-btn plan-btn-cyan">Contactar</button>
         </div>
- 
+
       </div><!-- /plans-grid -->
     </div><!-- /modal -->
   </div><!-- /modal-overlay -->
- 
- 
+
+
   <!-- =====================================================
        MODAL DE PAGO — Mercado Pago
   ===================================================== -->
   <div class="payment-overlay" id="payment-overlay">
     <div class="payment-modal">
       <button class="payment-close" id="payment-close" aria-label="Cerrar">✕</button>
- 
+
       <div class="payment-icon">💙</div>
- 
+
       <p class="payment-label">Mercado Pago · Transferencia</p>
       <h2 class="payment-title">¡Casi listo! Realizá el pago</h2>
- 
+
       <!-- Caja del alias — clickeable para copiar -->
       <div class="alias-box" id="alias-box" title="Tocá para copiar">
         <p class="alias-tag">Alias de Mercado Pago</p>
@@ -1001,20 +1002,20 @@
         </p>
         <span class="copy-toast" id="copy-toast">¡Copiado al portapapeles!</span>
       </div>
- 
+
       <p class="payment-note">
         Enviá el pago a ese alias y mandanos el comprobante a<br>
         <strong>hola@calcai.app</strong> para activar tu plan.
       </p>
     </div>
   </div>
- 
+
   <!-- FOOTER -->
   <footer>
     © 2025 CalcAI &mdash; Todos los derechos reservados
   </footer>
- 
- 
+
+
   <!-- =====================================================
        JAVASCRIPT — La lógica de la calculadora
   ===================================================== -->
@@ -1032,7 +1033,7 @@
       pendingResult: null,      // Resultado calculado, esperando a mostrarse
       pendingExpression: null   // Expresión completa para la línea pequeña
     };
- 
+
     // Referencias a los elementos del DOM (la página HTML)
     // Usamos getElementById para "agarrar" el elemento por su id.
     const valueEl      = document.getElementById('value');
@@ -1040,7 +1041,7 @@
     const displayEl    = document.getElementById('display');
     const overlay      = document.getElementById('modal-overlay');
     const modalClose   = document.getElementById('modal-close');
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Actualizar la pantalla
     // Toma el string actual del estado y lo muestra.
@@ -1050,7 +1051,7 @@
       // Formateamos el número para mostrar separadores de miles
       const num = parseFloat(state.currentValue);
       let display = state.currentValue;
- 
+
       // Si el número es válido y no termina en "." (decimal incompleto),
       // lo mostramos con el formato correcto.
       if (!isNaN(num) && !state.currentValue.endsWith('.')) {
@@ -1061,9 +1062,9 @@
           display = num.toLocaleString('es-AR');
         }
       }
- 
+
       valueEl.textContent = display;
- 
+
       // Ajuste dinámico del tamaño de fuente según la longitud
       const len = display.length;
       if (len > 12)      valueEl.style.fontSize = '1.4rem';
@@ -1071,7 +1072,7 @@
       else if (len > 7)  valueEl.style.fontSize = '2.2rem';
       else               valueEl.style.fontSize = '';  // Usa el CSS por defecto
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Manejar dígitos (0-9)
     // ─────────────────────────────────────────────────────
@@ -1092,7 +1093,7 @@
       }
       updateDisplay();
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Agregar el punto decimal
     // ─────────────────────────────────────────────────────
@@ -1109,7 +1110,7 @@
         updateDisplay();
       }
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Calcular el resultado
     // Recibe dos números y el operador, devuelve el resultado.
@@ -1118,7 +1119,7 @@
       // parseFloat convierte un string como "3.5" al número 3.5
       const numA = parseFloat(a);
       const numB = parseFloat(b);
- 
+
       switch (operator) {
         case '+': return numA + numB;
         case '−': return numA - numB;
@@ -1129,7 +1130,7 @@
         default: return numB;
       }
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Manejar operadores (+, −, ×, ÷)
     // ─────────────────────────────────────────────────────
@@ -1143,15 +1144,15 @@
         );
         updateDisplay();
       }
- 
+
       state.previousValue = state.currentValue;
       state.operator = op;
       state.waitingForNext = true;
- 
+
       // Mostramos la expresión parcial en la línea pequeña
       expressionEl.textContent = `${state.previousValue} ${op}`;
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Manejar el botón = (IGUAL)
     // Acá es donde se abre el modal de pricing.
@@ -1171,7 +1172,7 @@
       // Abrimos el modal de pricing de inmediato
       openModal();
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Botón AC (All Clear) — Limpia todo
     // ─────────────────────────────────────────────────────
@@ -1183,7 +1184,7 @@
       expressionEl.textContent = '';
       updateDisplay();
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Botón +/− (cambia el signo del número)
     // ─────────────────────────────────────────────────────
@@ -1199,7 +1200,7 @@
         updateDisplay();
       }
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Botón % (porcentaje)
     // ─────────────────────────────────────────────────────
@@ -1208,7 +1209,7 @@
       state.currentValue = String(val / 100);
       updateDisplay();
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Abrir el modal de pricing
     // ─────────────────────────────────────────────────────
@@ -1217,14 +1218,14 @@
       // Bloqueamos el scroll de fondo mientras el modal está abierto
       document.body.style.overflow = 'hidden';
     }
- 
+
     // ─────────────────────────────────────────────────────
     // FUNCIÓN: Cerrar el modal de pricing
     // ─────────────────────────────────────────────────────
     function closeModal() {
       overlay.classList.remove('active');
       document.body.style.overflow = '';
- 
+
       // Si había un resultado pendiente, lo mostramos ahora que se cerró el modal
       if (state.pendingResult !== null) {
         state.currentValue       = state.pendingResult;
@@ -1235,17 +1236,17 @@
         state.pendingResult      = null;
         state.pendingExpression  = null;
         updateDisplay();
- 
+
         // Flash de color al revelar el resultado
         displayEl.classList.add('flash');
         setTimeout(() => displayEl.classList.remove('flash'), 400);
       }
     }
- 
+
     // ─────────────────────────────────────────────────────
     // EVENT LISTENERS — "Escuchamos" eventos en la página
     // ─────────────────────────────────────────────────────
- 
+
     // Escuchamos todos los clics en el contenedor de botones
     // (Delegación de eventos: mejor que poner un listener en cada botón)
     document.getElementById('buttons').addEventListener('click', function(event) {
@@ -1253,10 +1254,10 @@
       // closest('.btn') sube en el DOM hasta encontrar el botón
       const btn = event.target.closest('.btn');
       if (!btn) return;  // Si el clic no fue en un botón, salimos
- 
+
       const action = btn.dataset.action;   // El atributo data-action del HTML
       const value  = btn.dataset.value;    // El atributo data-value del HTML
- 
+
       // Según el action, llamamos a la función correspondiente
       switch (action) {
         case 'digit':       handleDigit(value);    break;
@@ -1268,21 +1269,21 @@
         case 'decimal':     handleDecimal();       break;
       }
     });
- 
+
     // Cerrar el modal con el botón X
     modalClose.addEventListener('click', closeModal);
- 
+
     // Cerrar el modal haciendo clic en el overlay (fondo oscuro)
     overlay.addEventListener('click', function(event) {
       // Solo cerramos si el clic fue directamente en el overlay,
       // no en la tarjeta del modal (que también es hijo del overlay)
       if (event.target === overlay) closeModal();
     });
- 
+
     // Teclado: soporte para usar la calculadora con el teclado físico
     document.addEventListener('keydown', function(event) {
       const key = event.key;
- 
+
       if (key >= '0' && key <= '9') handleDigit(key);
       else if (key === '.') handleDecimal();
       else if (key === '+') handleOperator('+');
@@ -1301,8 +1302,8 @@
         }
       }
     });
- 
- 
+
+
     // ─────────────────────────────────────────────────────
     // MODAL DE PAGO — Mercado Pago
     // ─────────────────────────────────────────────────────
@@ -1310,24 +1311,24 @@
     const paymentClose   = document.getElementById('payment-close');
     const aliasBox       = document.getElementById('alias-box');
     const copyToast      = document.getElementById('copy-toast');
- 
+
     function openPaymentModal() {
       paymentOverlay.classList.add('active');
       // El pricing modal se queda abierto debajo (z-index menor)
     }
- 
+
     function closePaymentModal() {
       paymentOverlay.classList.remove('active');
     }
- 
+
     // Cerrar con el botón X
     paymentClose.addEventListener('click', closePaymentModal);
- 
+
     // Cerrar clickeando el overlay de fondo
     paymentOverlay.addEventListener('click', function(e) {
       if (e.target === paymentOverlay) closePaymentModal();
     });
- 
+
     // Copiar alias al portapapeles al hacer clic en la caja
     aliasBox.addEventListener('click', function() {
       navigator.clipboard.writeText('juan.denk').then(function() {
@@ -1341,7 +1342,7 @@
         setTimeout(() => copyToast.classList.remove('show'), 2000);
       });
     });
- 
+
     // Delegar clic en los botones de plan dentro del modal de pricing
     // Cualquier .plan-btn abre el modal de pago
     document.getElementById('modal').addEventListener('click', function(e) {
@@ -1349,8 +1350,8 @@
         openPaymentModal();
       }
     });
- 
+
   </script>
- 
+
 </body>
 </html>
